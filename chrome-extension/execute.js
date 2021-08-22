@@ -3,18 +3,43 @@ var push = document.getElementsByClassName('push');
 
 
 /** Define POST method */
-const postHypothesis = function (text) {
+const postHypothesis = function (text, quoted) {
   var xhr = new XMLHttpRequest();
   var url = 'https://api.hypothes.is/api/annotations';
+  // var data = {
+  //   uri: document.URL,
+  //   document: { "title": ["TESTING"]},
+  //   text: text,
+  //   tags: ["ptt"],
+  //   link: [
+  //       { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
+  //   ]
+  // }
   var data = {
-    uri: document.URL,
-    document: { "title": ["TESTING"]},
-    text: text,
-    tags: ["ptt"],
-    link: [
+    "uri": document.URL,
+    "document": { "title": ["references"]},
+    "text": text,
+    "link": [
         { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
-    ]
+    ],
+    'group': '__world__',
+    'permissions': {
+        'read': ['group:__world__'],
+        'admin': ['acct:celestine1305@hypothes.is'],
+        'update': ['acct:celestine1305@hypothes.is'],
+        'delete': ['acct:celestine1305@hypothes.is']
+    },
+    'target': [{
+        'source': document.URL,
+        'selector': [
+            {
+                'type': 'TextQuoteSelector',
+                'exact': quoted
+            }
+        ]
+    }]
   }
+
   var json = JSON.stringify(data);
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-Type", "application/json");
@@ -43,7 +68,7 @@ var mouseClickFunction = function () {
                + " [Content] " + this.getElementsByClassName('f3 push-content')[0].textContent
                + " [IP&Time] " + this.getElementsByClassName('push-ipdatetime')[0].textContent;
       console.log("POST:\n" + text);
-      postHypothesis(text);
+      postHypothesis(text, this.textContent);
   }
 }
 
