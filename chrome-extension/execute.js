@@ -37,13 +37,13 @@ var mouseOutFunction = function () {
   this.setAttribute("style", "background-color: initial;");
 };
 var mouseClickFunction = function () {
-  // console.log("Clicked!");
-  // console.log('推文ID ： ' + this.getElementsByClassName('f3 hl push-userid')[0].textContent);
-  // console.log('推文內容 ' + this.getElementsByClassName('f3 push-content')[0].textContent);
   var yes = window.confirm("標記此推文為仇恨言論？\n >> " + this.getElementsByClassName('f3 hl push-userid')[0].textContent + this.getElementsByClassName('f3 push-content')[0].textContent);
   if (yes) {
-      console.log("POST: " + this.textContent);
-      postHypothesis(this.textContent);
+      var text = " [User-ID] " + this.getElementsByClassName('f3 hl push-userid')[0].textContent
+               + " [Content] " + this.getElementsByClassName('f3 push-content')[0].textContent
+               + " [IP&Time] " + this.getElementsByClassName('push-ipdatetime')[0].textContent;
+      console.log("POST:\n" + text);
+      postHypothesis(text);
   }
 }
 
