@@ -16,14 +16,13 @@ def index():
 @app.route('/tutorial')
 """
 
-@app.route('/rank')
+@app.route('/rank', methods=['POST'])
 def ranking():
-    return jsonify({'rank': compute.globalrank()})
-
-@app.route('/myrank', methods=['POST'])
-def myranking():
     id = request.get_json()['id']
-    return jsonify({'rank': compute.myrank(id)})
+    if id:
+        return jsonify({'rank': compute.myrank(id)})
+    else:
+        return jsonify({'rank': compute.globalrank()})
 
 @app.route('/search', methods=['POST'])
 def searchID():

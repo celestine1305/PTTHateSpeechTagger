@@ -17,10 +17,10 @@ function postData(url, data) {
 }
 
 function submit() {
-    const qid = document.getElementById('qid').value;
+    const id = document.getElementById('qid').value;
 
     const data = {
-        "id": qid
+        id
     }
 
     postData('http://192.168.8.99:3000/search', data)

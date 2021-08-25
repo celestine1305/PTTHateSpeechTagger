@@ -87,11 +87,19 @@ def globalrank():
 
     # rank
     board = sorted( ((v["count"], k) for k, v in id2text_dict.items()), reverse=True)
-    rank = 1
+    r = 1
     ret = {}
     for cnt, id in board[:10]:
-        ret[rank] = {"rank": rank, "id": id, "cnt": cnt}
-        rank += 1
+        if r == 1:
+            ret[r] = {"rank": r, "id": id, "cnt": cnt}
+        else:
+            last_cnt = ret[r-1]["cnt"]
+            if last_cnt == cnt:
+                ret[r] = {"rank": ret[r-1]["rank"], "id": id, "cnt": cnt}
+            else:
+                ret[r] = {"rank": r, "id": id, "cnt": cnt}
+
+        r += 1
     return ret
 
 def myrank(id):
@@ -114,9 +122,16 @@ def myrank(id):
 
     # rank
     board = sorted( ((v["count"], k) for k, v in myid2text_dict.items()), reverse=True)
-    rank = 1
+    r = 1
     ret = {}
     for cnt, id in board[:10]:
-        ret[rank] = {"rank": rank, "id": id, "cnt": cnt}
-        rank += 1
+        if r == 1:
+            ret[r] = {"rank": r, "id": id, "cnt": cnt}
+        else:
+            last_cnt = ret[r-1]["cnt"]
+            if last_cnt == cnt:
+                ret[r] = {"rank": ret[r-1]["rank"], "id": id, "cnt": cnt}
+            else:
+                ret[r] = {"rank": r, "id": id, "cnt": cnt}
+        r += 1
     return ret
