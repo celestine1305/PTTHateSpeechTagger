@@ -1,20 +1,17 @@
 console.log("start :D");
 var push = document.getElementsByClassName('push');
+var token;
+  
+var dict = {};
 
+var ipRegex   = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/;
+var timeRegex = /\d{1,2}\/\d{1,2} \d{1,2}\:\d{1,2}/;  
+var idRegex = /\w*/;  
 
 /** Define POST method */
-const postHypothesis = function (text, quoted) {
+const postHypothesis = function (text, quoted, type) {
   var xhr = new XMLHttpRequest();
   var url = 'https://api.hypothes.is/api/annotations';
-  // var data = {
-  //   uri: document.URL,
-  //   document: { "title": ["TESTING"]},
-  //   text: text,
-  //   tags: ["ptt"],
-  //   link: [
-  //       { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
-  //   ]
-  // }
   var data = {
     "uri": document.URL,
     "document": { "title": ["references"]},
@@ -22,12 +19,10 @@ const postHypothesis = function (text, quoted) {
     "link": [
         { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
     ],
+    "tags": ['ptt', type],
     'group': '__world__',
     'permissions': {
-        'read': ['group:__world__'],
-        'admin': ['acct:celestine1305@hypothes.is'],
-        'update': ['acct:celestine1305@hypothes.is'],
-        'delete': ['acct:celestine1305@hypothes.is']
+        'read': ['group:__world__']
     },
     'target': [{
         'source': document.URL,
@@ -39,39 +34,60 @@ const postHypothesis = function (text, quoted) {
         ]
     }]
   }
-
-  var json = JSON.stringify(data);
+  chrome.storage.sync.get('token', (res) => {  
+    token = res.token;
+    console.log("TOKEN: "+token);
+  });
+  var jsondata = JSON.stringify(data);
+  var error = false;
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", "Bearer 6879-1DT-iEA0raktuundhJukwUXNNe4k6xeo7wG8EArqVng");
+  xhr.setRequestHeader("Authorization", "Bearer "+token);
   xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
           var json = JSON.parse(xhr.responseText);
           console.log(json);
       }
+      else if (xhr.status != 200 && error == false) {
+        error = true;
+        alert("標註失敗，請重新輸入 Token 並重新整理一次。");
+      }
   };
-  xhr.send(json)
+  xhr.send(jsondata)
 }
 
 
 /** Define mouse event of ptt.cc website */
 var mouseOverFunction = function () {
+  id = this.getElementsByClassName('f3 hl push-userid')[0].textContent;
+  dict[id].forEach(function(item, index, array) {
+    push[item].setAttribute("style", "background-color: rgba(255, 255, 255, 0.20);");
+  });
   this.setAttribute("style", "background-color: rgba(255, 255, 116, 0.30);"); // your colour change
 };
 var mouseOutFunction = function () {
-  this.setAttribute("style", "background-color: initial;");
+  id = this.getElementsByClassName('f3 hl push-userid')[0].textContent;
+  dict[id].forEach(function(item, index, array) {
+    push[item].setAttribute("style", "background-color: initial;");
+  });
 };
 var mouseClickFunction = function () {
   var yes = window.confirm("標記此推文為仇恨言論？\n >> " + this.getElementsByClassName('f3 hl push-userid')[0].textContent + this.getElementsByClassName('f3 push-content')[0].textContent);
   if (yes) {
-      var text = " [User-ID] " + this.getElementsByClassName('f3 hl push-userid')[0].textContent
-               + " [Content] " + this.getElementsByClassName('f3 push-content')[0].textContent
-               + " [IP&Time] " + this.getElementsByClassName('push-ipdatetime')[0].textContent;
+      
+      var content = this.getElementsByClassName('f3 push-content')[0].textContent;
+      var iptime = this.getElementsByClassName('push-ipdatetime')[0].textContent;
+      var ip = iptime.match(ipRegex)[0];
+      var time = iptime.match(timeRegex)[0];
+      var data = {"id": this.getElementsByClassName('f3 hl push-userid')[0].textContent, 
+                  "content": content.slice(content.indexOf(" ")+1),
+                  "ip": ip, 
+                  "time": time}
+      var text = JSON.stringify(data);
       console.log("POST:\n" + text);
-      postHypothesis(text, this.textContent);
+      postHypothesis(text, this.textContent, 'push');
   }
 }
-
 
 /** Difine disable/enable ptt tagger tool Function */
 const enableTagger = () => {
@@ -95,6 +111,13 @@ const disableTagger = () => {
     push[i].onclick = null;
   }
 }
+const changeToken = () => {
+  console.log("Change Token");
+  chrome.storage.sync.get('token', (res) => {  
+    token = res.token;
+    console.log(token);
+  });
+}
 
 /** Difine event handler of popup */
 const onMessage = (message) => {
@@ -105,14 +128,15 @@ const onMessage = (message) => {
     case 'DISABLE':
       disableTagger();
       break;
-    case 'CLICK':
-
+    case 'CHANGETOKEN':
+      changeToken();
+      break;
     default:
       break;
   }
 }
 
-/** Load previous setting (enable/disable the tool) */
+/** Load previous setting (enable/disable the tool, API token) */
 chrome.storage.sync.get('enabled', (res) => {  
   if (res.enabled == undefined) {
     chrome.storage.sync.set({enabled: false}, () => {
@@ -124,4 +148,43 @@ chrome.storage.sync.get('enabled', (res) => {
   else disableTagger();
 });
 
+chrome.storage.sync.get('token', (res) => {  
+  token = res.token;
+  console.log("TOKEN: "+ token);
+});
+
+/** organize push content by ID */
+for (var i = 0; i < push.length; i++) {
+  var id = push[i].getElementsByClassName("f3 hl push-userid")[0].textContent;
+  if (id in dict == false)  dict[id] = [];
+  dict[id].push(i);
+}
+
+/** 新增標註文章的按鈕 */
+let btn = document.createElement("button");
+btn.innerHTML = "標註這篇文章";
+document.getElementsByClassName('f2')[1].appendChild(btn);
+
+btn.addEventListener("click", function () {
+  var texts = document.getElementsByClassName("article-meta-value");
+  var author = texts[0].textContent.match(idRegex)[0];
+  var title = texts[2].textContent;
+  var time = texts[3].textContent;
+  var yes = window.confirm("標記此篇文章為仇恨言論？\n" + 
+                           ">> 作者：" + author + "\n" +
+                           ">> 標題：" + title );
+  var ip = document.getElementsByClassName("f2")[0].textContent.match(ipRegex)[0];
+  if (yes) {
+      var data = {"id": author, 
+                  "content": title,
+                  "ip": ip, 
+                  "time": time}
+      var text = JSON.stringify(data);
+      postHypothesis(text, title, 'aritcle');
+  }
+});
+
 chrome.runtime.onMessage.addListener(onMessage);
+
+
+/**  */

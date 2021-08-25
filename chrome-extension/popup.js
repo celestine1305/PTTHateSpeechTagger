@@ -1,6 +1,30 @@
 var isChecked = false;
 var toggle = document.getElementById('toggle');
+var tokenButton = document.getElementById('token');
+var websiteButton = document.getElementById('website');
+var tutorialButton = document.getElementById('tutorial');
 
+var clickTutorial = function () {
+  var newURL = "https://www.netflix.com/";
+  chrome.tabs.create({ url: newURL });
+}
+
+var clickWebsite = function () {
+  var newURL = "https://www.netflix.com/";
+  chrome.tabs.create({ url: newURL });
+}
+
+var clickToken = function (tabId) {
+  var sendMessage = (messageObj) => chrome.tabs.sendMessage(tabId, messageObj);
+  var newtoken = prompt('Enter your new Hypothesis API Token');
+  console.log(newtoken);
+  if (newtoken != null && newtoken != "") {
+    chrome.storage.sync.set({token: newtoken}, () => {
+      console.log('setting new api token!');
+    });
+    sendMessage({ action:'CHANGETOKEN' });
+  }
+}
 
 var clickToggle = function (tabId) {
   var sendMessage = (messageObj) => chrome.tabs.sendMessage(tabId, messageObj);
@@ -25,12 +49,19 @@ var getSelectedTab = (tab) => {
     toggle.checked = isChecked;
   });
 
-  
-  // var s = document.getElementsByClassName('slider round')[0];
-  // toggle.disabled = true;
-  // s.style.cursor = 'default';
+  chrome.storage.sync.get('token', (res) => {
+    if (res.token == undefined) {
+      var newtoken = prompt('Enter your Hypothesis API Token');
+      chrome.storage.sync.set({token: newtoken}, () => {
+        console.log('first setting api token!');
+      });
+    }
+  });
   
   toggle.addEventListener('click', () => clickToggle(tabId));
+  tokenButton.addEventListener('click', () => clickToken(tabId));
+  tutorialButton.addEventListener('click', () => clickTutorial());
+  websiteButton.addEventListener('click', () => clickWebsite());
 
 }
 chrome.tabs.getSelected(null, getSelectedTab);
