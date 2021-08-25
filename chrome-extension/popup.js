@@ -48,15 +48,6 @@ var getSelectedTab = (tab) => {
     else isChecked = res.enabled;
     toggle.checked = isChecked;
   });
-
-  chrome.storage.sync.get('token', (res) => {
-    if (res.token == undefined) {
-      var newtoken = prompt('Enter your Hypothesis API Token');
-      chrome.storage.sync.set({token: newtoken}, () => {
-        console.log('first setting api token!');
-      });
-    }
-  });
   
   toggle.addEventListener('click', () => clickToggle(tabId));
   tokenButton.addEventListener('click', () => clickToken(tabId));

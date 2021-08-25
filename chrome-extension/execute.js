@@ -1,6 +1,6 @@
 console.log("start :D");
 var push = document.getElementsByClassName('push');
-var token;
+var token = "6879-005OkdwoeiT9JA6XP2XUxxugAaaSh4rQlq8RyUz-cy8";
   
 var dict = {};
 
@@ -14,7 +14,7 @@ const postHypothesis = function (text, quoted, type) {
   var url = 'https://api.hypothes.is/api/annotations';
   var data = {
     "uri": document.URL,
-    "document": { "title": ["references"]},
+    "document": { "title": ["PTT Hate Speech Tagger"]},
     "text": text,
     "link": [
         { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
@@ -35,7 +35,7 @@ const postHypothesis = function (text, quoted, type) {
     }]
   }
   chrome.storage.sync.get('token', (res) => {  
-    token = res.token;
+    if (res.token != undefined) token = res.token;
     console.log("TOKEN: "+token);
   });
   var jsondata = JSON.stringify(data);
@@ -149,7 +149,7 @@ chrome.storage.sync.get('enabled', (res) => {
 });
 
 chrome.storage.sync.get('token', (res) => {  
-  token = res.token;
+  if (res.token != undefined) token = res.token;
   console.log("TOKEN: "+ token);
 });
 
@@ -185,6 +185,3 @@ btn.addEventListener("click", function () {
 });
 
 chrome.runtime.onMessage.addListener(onMessage);
-
-
-/**  */
