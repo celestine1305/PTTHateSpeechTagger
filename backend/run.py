@@ -8,25 +8,19 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def index():
-    return 'homepage'
-
-"""
-@app.route('/tutorial')
-"""
-
-@app.route('/rank', methods=['POST'])
+@app.route('/rank', methods=['GET'])
 def ranking():
-    id = request.get_json()['id']
+    id = request.args.get('id')
     if id:
         return jsonify({'rank': compute.myrank(id)})
     else:
         return jsonify({'rank': compute.globalrank()})
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET'])
 def searchID():
-    qid = request.get_json()['id']
+    qid = request.args.get('id')
+    print(qid)
+    print("---")
     result = compute.query(qid)
     
     return jsonify(result)

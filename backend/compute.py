@@ -63,10 +63,9 @@ def query(id):
         },...]
     }
     """
+    print(id)
     # get data
     id2text_dict = builddict()
-    print(id)
-    print(id2text_dict)
     # search
     try:
         return id2text_dict[id]
