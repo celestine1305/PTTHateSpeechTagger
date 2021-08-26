@@ -1,17 +1,30 @@
 var isChecked = false;
 var toggle = document.getElementById('toggle');
 var tokenButton = document.getElementById('token');
+var resetButton = document.getElementById('resettoken');
 var websiteButton = document.getElementById('website');
 var tutorialButton = document.getElementById('tutorial');
 
 var clickTutorial = function () {
-  var newURL = "https://www.netflix.com/";
+  var newURL = "https://www.csie.ntu.edu.tw/~b07902010/PTTHateSpeechTagger/tutorial.html";
   chrome.tabs.create({ url: newURL });
 }
 
 var clickWebsite = function () {
-  var newURL = "https://www.netflix.com/";
+  var newURL = "https://www.csie.ntu.edu.tw/~b07902010/PTTHateSpeechTagger/";
   chrome.tabs.create({ url: newURL });
+}
+
+var resetToken = function (tabId) {
+  var sendMessage = (messageObj) => chrome.tabs.sendMessage(tabId, messageObj);
+  let newtoken = "6879-005OkdwoeiT9JA6XP2XUxxugAaaSh4rQlq8RyUz-cy8";
+  if (newtoken != null && newtoken != "") {
+    chrome.storage.sync.set({token: newtoken}, () => {
+      console.log('setting new api token!');
+    });
+    sendMessage({ action:'CHANGETOKEN' });
+  }
+  alert("Reset to default token.")
 }
 
 var clickToken = function (tabId) {
@@ -48,20 +61,13 @@ var getSelectedTab = (tab) => {
     else isChecked = res.enabled;
     toggle.checked = isChecked;
   });
-
-  chrome.storage.sync.get('token', (res) => {
-    if (res.token == undefined) {
-      var newtoken = prompt('Enter your Hypothesis API Token');
-      chrome.storage.sync.set({token: newtoken}, () => {
-        console.log('first setting api token!');
-      });
-    }
-  });
   
   toggle.addEventListener('click', () => clickToggle(tabId));
   tokenButton.addEventListener('click', () => clickToken(tabId));
   tutorialButton.addEventListener('click', () => clickTutorial());
   websiteButton.addEventListener('click', () => clickWebsite());
+  resetButton.addEventListener('click', () => resetToken(tabId));
+  
 
 }
 chrome.tabs.getSelected(null, getSelectedTab);

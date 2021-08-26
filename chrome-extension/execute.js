@@ -1,6 +1,6 @@
 console.log("start :D");
 var push = document.getElementsByClassName('push');
-var token;
+var token = "6879-005OkdwoeiT9JA6XP2XUxxugAaaSh4rQlq8RyUz-cy8";
   
 var dict = {};
 
@@ -8,13 +8,41 @@ var ipRegex   = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/;
 var timeRegex = /\d{1,2}\/\d{1,2} \d{1,2}\:\d{1,2}/;  
 var idRegex = /\w*/;  
 
+/** 新增標註文章的按鈕 */
+var btn = document.createElement("button");
+btn.innerHTML = "標註這篇文章";
+if (document.getElementsByClassName('article-meta-tag').length >= 4 && document.getElementsByClassName('article-meta-tag')[3].textContent == "時間")
+  document.getElementsByClassName('article-meta-value')[3].appendChild(btn);
+
+// btn.setAttribute("style", "padding: 0px 10px 0px 10px;");
+btn.addEventListener("click", function () {
+  var texts = document.getElementsByClassName("article-meta-value");
+  var author = texts[0].textContent.match(idRegex)[0];
+  var title = texts[2].textContent;
+  var time = texts[3].textContent;
+  var yes = window.confirm("標記此篇文章為仇恨言論？\n" + 
+                           ">> 作者：" + author + "\n" +
+                           ">> 標題：" + title );
+  var ip = document.getElementsByClassName("f2")[0].textContent.match(ipRegex)[0];
+  if (yes) {
+      var data = {"id": author, 
+                  "content": title,
+                  "ip": ip, 
+                  "time": time}
+      var text = JSON.stringify(data);
+      postHypothesis(text, title, 'aritcle');
+  }
+});
+
+
+
 /** Define POST method */
 const postHypothesis = function (text, quoted, type) {
   var xhr = new XMLHttpRequest();
   var url = 'https://api.hypothes.is/api/annotations';
   var data = {
     "uri": document.URL,
-    "document": { "title": ["references"]},
+    "document": { "title": ["PTTHateSpeechTagger"]},
     "text": text,
     "link": [
         { "href": "https://h.readthedocs.io/en/latest/api-reference/v2/#tag/annotations/paths/~1annotations/post"}
@@ -35,7 +63,7 @@ const postHypothesis = function (text, quoted, type) {
     }]
   }
   chrome.storage.sync.get('token', (res) => {  
-    token = res.token;
+    if (res.token != undefined) token = res.token;
     console.log("TOKEN: "+token);
   });
   var jsondata = JSON.stringify(data);
@@ -95,7 +123,7 @@ const enableTagger = () => {
 
   // var push = document.getElementsByClassName('push');
   // var content = document.getElementsByClassName('f3 push-content')
-
+  btn.style.display = "inline";
   for (var i=0; i < push.length; ++i) {
       push[i].onmouseover = mouseOverFunction;
       push[i].onmouseout  = mouseOutFunction;
@@ -109,6 +137,7 @@ const disableTagger = () => {
     push[i].onmouseover = null;
     push[i].onmouseout  = null;
     push[i].onclick = null;
+    btn.style.display = "none";
   }
 }
 const changeToken = () => {
@@ -149,7 +178,7 @@ chrome.storage.sync.get('enabled', (res) => {
 });
 
 chrome.storage.sync.get('token', (res) => {  
-  token = res.token;
+  if (res.token != undefined) token = res.token;
   console.log("TOKEN: "+ token);
 });
 
@@ -160,31 +189,6 @@ for (var i = 0; i < push.length; i++) {
   dict[id].push(i);
 }
 
-/** 新增標註文章的按鈕 */
-let btn = document.createElement("button");
-btn.innerHTML = "標註這篇文章";
-document.getElementsByClassName('f2')[1].appendChild(btn);
 
-btn.addEventListener("click", function () {
-  var texts = document.getElementsByClassName("article-meta-value");
-  var author = texts[0].textContent.match(idRegex)[0];
-  var title = texts[2].textContent;
-  var time = texts[3].textContent;
-  var yes = window.confirm("標記此篇文章為仇恨言論？\n" + 
-                           ">> 作者：" + author + "\n" +
-                           ">> 標題：" + title );
-  var ip = document.getElementsByClassName("f2")[0].textContent.match(ipRegex)[0];
-  if (yes) {
-      var data = {"id": author, 
-                  "content": title,
-                  "ip": ip, 
-                  "time": time}
-      var text = JSON.stringify(data);
-      postHypothesis(text, title, 'aritcle');
-  }
-});
 
 chrome.runtime.onMessage.addListener(onMessage);
-
-
-/**  */
