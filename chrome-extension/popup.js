@@ -6,12 +6,12 @@ var websiteButton = document.getElementById('website');
 var tutorialButton = document.getElementById('tutorial');
 
 var clickTutorial = function () {
-  var newURL = "https://www.netflix.com/";
+  var newURL = "https://www.csie.ntu.edu.tw/~b07902010/PTTHateSpeechTagger/tutorial.html";
   chrome.tabs.create({ url: newURL });
 }
 
 var clickWebsite = function () {
-  var newURL = "https://www.netflix.com/";
+  var newURL = "https://www.csie.ntu.edu.tw/~b07902010/PTTHateSpeechTagger/";
   chrome.tabs.create({ url: newURL });
 }
 
