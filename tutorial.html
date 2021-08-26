@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>PTT Hate Speech Tagger</title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <h1>PTT Hate Speech Tagger</h1>
+    <div class="buttonsection">
+        <button id="home" type="button" class="collapsible">首頁</button>
+        <button id="tutorial" type="button" class="collapsible">使用教學</button>
+        <button id="rank" type="button" class="collapsible">排行榜</button>
+        <button id="blacklist" type="button" class="collapsible">黑名單查詢</button>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>使用教學</h2>
+            <hr>
+            <h2 id="快速開始" data-id="快速開始"><a class="anchor hidden-xs" href="#快速開始" title="快速開始"><span
+                        class="octicon octicon-link"></span></a><span>快速開始</span></h2>
+            <h3 id="下載-Chrome-插件" data-id="下載-Chrome-插件"><a class="anchor hidden-xs" href="#下載-Chrome-插件"
+                    title="下載-Chrome-插件"><span class="octicon octicon-link"></span></a><span>下載 Chrome 插件</span></h3>
+            <ol>
+                <li><span>打開 </span><a href="https://github.com/celestine1305/PTTHateSpeechTagger/tree/cele"
+                        target="_blank"
+                        rel="noopener"><span>https://github.com/celestine1305/PTTHateSpeechTagger/tree/cele</span></a>
+                </li>
+                <li><span>點選右上角綠色 </span><strong><span>Code</span></strong><span> -&gt; </span><strong><span>Download
+                            ZIP</span></strong><br>
+                    <img src="https://i.imgur.com/aEI4eXG.png" alt="" loading="lazy">
+                </li>
+                <li><span>解壓縮 </span><strong><span>PTTHateSpeechTagger</span></strong></li>
+                <li><span>在 Chrome 瀏覽器中打開 chrome://extensions/</span></li>
+                <li><span>打開右上角 </span><strong><span>開發人員模式</span></strong><span>，選擇
+                    </span><strong><span>載入未封裝項目</span></strong><br>
+                    <img src="https://i.imgur.com/g6uoawD.png" alt="" loading="lazy">
+                </li>
+                <li><span>選擇剛剛下載的檔案中的 </span><strong><span>chrome-extension</span></strong><span> 資料夾，按
+                    </span><strong><span>選取</span></strong><br>
+                    <img src="https://i.imgur.com/BLhlfWY.png" alt="" loading="lazy">
+                </li>
+            </ol>
+            <h3 id="開始標註" data-id="開始標註"><a class="anchor hidden-xs" href="#開始標註" title="開始標註"><span
+                        class="octicon octicon-link"></span></a><span>開始標註</span></h3>
+            <ol>
+                <li><span>必須在 </span><a href="http://ptt.cc" target="_blank"
+                        rel="noopener"><span>ptt.cc</span></a><span> 這個 domain 上才能使用</span></li>
+                <li><span>使用 Chrome 瀏覽器，點選右上角的拼圖，打開 </span><strong><span>PTT Hate Speech Tagger</span></strong><span>，並把
+                        Enable Toolkit 的滑桿打開</span><br>
+                    <img src="https://i.imgur.com/R5okH8t.png" alt="" loading="lazy">
+                </li>
+                <li><span>會跳出一個視窗詢問你的 Token，可以先按取消來關閉</span></li>
+                <li><span>點選 </span><strong><span>標註這篇文章</span></strong><span>，按下
+                    </span><strong><span>確定</span></strong><span> 即可標註內文</span><br>
+                    <img src="https://i.imgur.com/WaE3Qhm.png" alt="" loading="lazy">
+                </li>
+                <li><span>點選留言，按下 </span><strong><span>確定</span></strong><span> 即可標註該留言</span><br>
+                    <img src="https://i.imgur.com/LtpDmKP.png" alt="" loading="lazy">
+                </li>
+            </ol>
+            <h3 id="查看排行榜" data-id="查看排行榜"><a class="anchor hidden-xs" href="#查看排行榜" title="查看排行榜"><span
+                        class="octicon octicon-link"></span></a><span>查看排行榜</span></h3>
+            <ol>
+                <li><span>點選 </span><strong><span>排行榜</span></strong><span> </span><a
+                        href="http://localhost:8080/rank.html" target="_blank"
+                        rel="noopener"><span>http://localhost:8080/rank.html</span></a></li>
+                <li><span>搜尋欄留空，即為目前所有被標記 ID 的前十名</span></li>
+                <li><span>在想要查看的 ID 上點一下</span></li>
+                <li><span>點選 </span><strong><span>查詢此帳號</span></strong><span>即可查看該帳號被標注的言論</span><br>
+                    <img src="https://i.imgur.com/0Qq7jJX.png" alt="" loading="lazy">
+                </li>
+            </ol>
+            <h3 id="黑名單查詢" data-id="黑名單查詢"><a class="anchor hidden-xs" href="#黑名單查詢" title="黑名單查詢"><span
+                        class="octicon octicon-link"></span></a><span>黑名單查詢</span></h3>
+            <ol>
+                <li><span>點選 </span><strong><span>黑名單查詢</span></strong><span> </span><a
+                        href="http://localhost:8080/search.html" target="_blank"
+                        rel="noopener"><span>http://localhost:8080/search.html</span></a></li>
+                <li><span>輸入想要查詢的 PTT ID</span></li>
+                <li><span>點選推文紀錄即可查看該篇文章</span><br>
+                    <img src="https://i.imgur.com/ea9T0Fy.png" alt="" loading="lazy">
+                </li>
+            </ol>
+            <h2 id="申請個人帳號" data-id="申請個人帳號"><a class="anchor hidden-xs" href="#申請個人帳號" title="申請個人帳號"><span
+                        class="octicon octicon-link"></span></a><span>申請個人帳號</span></h2>
+            <blockquote>
+                <p><span>若沒有申請個人帳號，則會使用</span><strong><span>公用</span></strong><span>的 Hypothesis 帳號來標註</span></p>
+            </blockquote>
+            <h3 id="申請-Hypothesis-Token" data-id="申請-Hypothesis-Token"><a class="anchor hidden-xs"
+                    href="#申請-Hypothesis-Token" title="申請-Hypothesis-Token"><span
+                        class="octicon octicon-link"></span></a><span>申請 Hypothesis Token</span></h3>
+            <ol>
+                <li><span>打開 </span><a href="https://web.hypothes.is/start/" target="_blank"
+                        rel="noopener"><span>https://web.hypothes.is/start/</span></a></li>
+                <li><span>點擊 </span><strong><span>Create A Free Account</span></strong></li>
+                <li><span>申請帳號，並到 email 點擊認證連結</span></li>
+                <li><span>認證過後，點擊 </span><strong><span>Setting</span></strong><span> &gt;
+                    </span><strong><span>Develper</span></strong>
+                    <blockquote>
+                        <p><img src="https://i.imgur.com/iv8rDmJ.png" alt="" loading="lazy"></p>
+                    </blockquote>
+                </li>
+                <li><span>點擊 </span><strong><span>Generate your API token</span></strong><span>，並將 token 複製起來</span>
+                    <blockquote>
+                        <p><img src="https://i.imgur.com/Kji7Zxw.png" alt="" loading="lazy"></p>
+                    </blockquote>
+                </li>
+                <li><span>點擊 Extension 的 Icon，並點選 </span><strong><span>Change Token</span></strong>
+                    <blockquote>
+                        <p><img src="https://i.imgur.com/TMvs3aR.png" alt="" loading="lazy"></p>
+                    </blockquote>
+                </li>
+                <li><span>輸入複製的 token 即完成</span></li>
+            </ol>
+            <h3 id="查看我的排行榜" data-id="查看我的排行榜"><a class="anchor hidden-xs" href="#查看我的排行榜" title="查看我的排行榜"><span
+                        class="octicon octicon-link"></span></a><span>查看我的排行榜</span></h3>
+            <ol>
+                <li><span>點選 </span><strong><span>排行榜</span></strong><span> </span><a
+                        href="http://localhost:8080/rank.html" target="_blank"
+                        rel="noopener"><span>http://localhost:8080/rank.html</span></a></li>
+                <li><span>搜尋欄輸入自己的 Hypothesis ID，即為目前所有被自己標記 ID 的前十名</span></li>
+        </div>
+    </div>
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>
