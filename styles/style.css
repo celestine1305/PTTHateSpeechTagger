@@ -103,3 +103,33 @@ img {
 img {
   width: 75%;
 }
+
+blockquote{
+  margin: 20px;
+ padding: 10px;
+ background-color: #eeeeee;
+ border-left: 5px solid #868686;;
+ margin: 15px 30px 0 10px;
+ padding-left: 20px;
+ border-radius: 6px;
+}
+
+.searchbutton {
+  display: block;
+  margin: 0px 0px 0px 10px;
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  text-align: center; 
+  font-weight:bold;
+  border-radius: 10%;
+  border: 10% rgb(117, 117, 117);
+}
+
+form {
+  display: flex;
+}
+
+.active, .searchbutton:hover {
+  background-color: #ccc;
+}
