@@ -34,8 +34,7 @@ searchinput.addEventListener("keyup", function (event) {
 
 function submit() {
     const id = document.getElementById('searchinput').value;
-
-    let url = new URL('http://192.168.8.99:3000/search'),
+    let url = new URL('https://ptt-hate-speech-tagger-api.herokuapp.com/search'),
         params = { id: id}
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 

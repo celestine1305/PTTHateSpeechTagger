@@ -19,7 +19,7 @@ function postData(url) {
 function submit() {
     const id = document.getElementById("searchinput").value;
 
-    let url = new URL('http://192.168.8.99:3000/rank'),
+    let url = new URL('https://ptt-hate-speech-tagger-api.herokuapp.com/rank'),
         params = { id: id }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -53,14 +53,15 @@ google.charts.setOnLoadCallback(drawChart);
 submit()
 
 function drawChart(dt) {
-
+    // dt = [["帳號", "數量",], ['test1', 20], ['test2', 18], ['test3', 15], ['test4', 7], ['test5', 7], ['test6', 6], ['test7', 3], ['test8', 3], ['test9', 2], ['test10', 1],];
     var chart_data = google.visualization.arrayToDataTable(dt);
 
     var options = {
         // chartArea: { width: '70%', height: "80%"},
+        animation: {duration: 500,  startup: true, easing: 'out'},
         colors: ['#444'],
         backgroundColor: "#f5f5f5",
-        height: 300,
+        height: 600,
         hAxis: {
             minValue: 0,
             baseline: 0,
