@@ -6,7 +6,6 @@
     <title>PTT Hate Speech Tagger</title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
     <link href="styles/style.css" rel="stylesheet" type="text/css">
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
@@ -20,18 +19,16 @@
 
     <div class="container">
         <div class="section">
-            <h2>排行榜</h2>
+            <h2>黑名單查詢</h2>
             <hr>
-            <form>輸入我的 Hypothesis ID：<input type="text" name="id" id="searchinput"></form>
+            <form>輸入 PTT ID：<input type="text" name="id" id="searchinput"></form>
             <button id="searchbutton" type="button" onclick="submit()">GO!</button>
         </div>
-        <div class="section" id="chart_div">
+        <div class="section" id="result">
         </div>
     </div>
 
-
-    <div id="chart_div"></div>
-    <script src="scripts/rank.js"></script>
+    <script src="scripts/search.js"></script>
     <script src="scripts/main.js"></script>
 </body>
 

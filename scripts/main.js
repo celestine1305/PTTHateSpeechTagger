@@ -8,7 +8,5 @@ document.getElementById("rank").addEventListener("click", function () {
     location.href = "./rank.html";
 });
 document.getElementById("blacklist").addEventListener("click", function () {
-    location.href = "./blacklist.html";
+    location.href = "./search.html";
 });
-
-
