@@ -99,3 +99,7 @@ img {
 .active, .push:hover {
   background-color: #ccc;
 }
+
+img {
+  width: 75%;
+}
